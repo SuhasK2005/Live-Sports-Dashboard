@@ -12,6 +12,9 @@ const server = http.createServer(app);
 
 app.use(express.json());
 
+// Public health-check endpoint — intentionally registered before securityMiddleware()
+// so it is not subject to Arcjet rate-limiting / bot-detection. Keep it lightweight
+// and free of sensitive data.
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });

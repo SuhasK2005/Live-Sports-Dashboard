@@ -26,10 +26,8 @@ export const wsArcjet = arcjetKey
       key: arcjetKey,
       rules: [
         shield({ mode: arcjetMode }),
-        detectBot({
-          mode: arcjetMode,
-          allow: ["CATEGORY:SEARCH_ENGINE", "CATEGORY:PREVIEW"],
-        }),
+        // No allow list — search engines / link previews don't use WebSocket
+        detectBot({ mode: arcjetMode }),
         slidingWindow({ mode: arcjetMode, interval: "2s", max: 5 }),
       ],
     })
