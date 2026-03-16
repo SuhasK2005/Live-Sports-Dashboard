@@ -2,6 +2,7 @@ import express from "express";
 import { matchRouter } from "./routes/matches.js";
 import http from "http";
 import { attachWebSocketServer } from "./ws/server.js";
+import { securityMiddleware } from "./arcjet.js";
 
 const PORT = Number(process.env.PORT || 8000);
 const HOST = process.env.HOST || "0.0.0.0";
@@ -11,9 +12,14 @@ const server = http.createServer(app);
 
 app.use(express.json());
 
+// Public health-check endpoint — intentionally registered before securityMiddleware()
+// so it is not subject to Arcjet rate-limiting / bot-detection. Keep it lightweight
+// and free of sensitive data.
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
+
+app.use(securityMiddleware());
 
 app.use("/matches", matchRouter);
 
